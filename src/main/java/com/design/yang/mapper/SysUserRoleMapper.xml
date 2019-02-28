@@ -1,0 +1,32 @@
+<!--<?xml version="1.0" encoding="UTF-8" ?>-->
+<!--<mapper namespace="com.design.yang.mapper.SysUserRoleMapper">-->
+
+    <!--<resultMap id="appUserMap" type="com.design.yang.dto.AppUser">-->
+        <!--<result column="user_id" property="userid" jdbcType="LONG" />-->
+        <!--<result column="user_account" property="userAccount" jdbcType="VARCHAR" />-->
+        <!--<result column="user_mobile" property="mobile" jdbcType="VARCHAR" />-->
+        <!--<result column="user_email" property="email" jdbcType="VARCHAR" />-->
+        <!--<result column="password" property="password" jdbcType="VARCHAR" />-->
+        <!--<result column="status" property="status" jdbcType="VARCHAR" />-->
+        <!--<result column="role_name" property="roles" jdbcType="VARCHAR" />-->
+    <!--</resultMap>-->
+
+
+    <!--<select id="queryUserByAccount" resultMap="appUserMap">-->
+        <!--SELECT-->
+        <!--ul.user_id,-->
+        <!--ul.user_account,-->
+        <!--ul.user_mobile,-->
+        <!--ul.user_email,-->
+        <!--ul.`password`,-->
+        <!--ul.`status`,-->
+        <!--sr.role_name-->
+        <!--FROM-->
+        <!--user_login ul-->
+        <!--LEFT JOIN user_role ur ON ul.user_id = ur.user_id-->
+        <!--LEFT JOIN sys_role sr on ur.role_id = sr.role_id-->
+        <!--WHERE ul.user_account = #{account}-->
+    <!--</select>-->
+
+
+<!--</mapper>-->

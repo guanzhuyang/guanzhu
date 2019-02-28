@@ -1,5 +1,7 @@
 package com.design.yang.controller;
 
+import com.design.yang.AppException.AppException;
+import com.design.yang.BaseResponse.BaseResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,4 +23,12 @@ public class TestController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return "order id : " + id;
     }
+
+    @GetMapping("/eeee/id")
+    public BaseResponse getT() {
+        //for debug
+        throw new AppException( 6011L,"test exception");
+    }
+
+
 }
