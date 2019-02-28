@@ -28,10 +28,12 @@ public class MyUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         //验证登陆是否合法
-        log.info("1111 ");
         List<AppUser> users = sysUserRoleMapper.queryUserByAccount(username);
-        log.info("user login ");
-
-        return new User(username, passwordEncoder.encode("123456"), AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER"));
+        if(users == null || users.size() == 0){
+            throw new UsernameNotFoundException("未找到用户名");
+        }
+        AppUser user = users.get(0);
+        log.info("user login userid {}",user.getUserId());
+        return new User(String.valueOf(user.getUserId()), passwordEncoder.encode(user.getPassword()), AuthorityUtils.commaSeparatedStringToAuthorityList(user.getRoles()));
     }
 }
