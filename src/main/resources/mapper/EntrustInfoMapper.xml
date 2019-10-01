@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.design.yang.mapper.EntrustInfoMapper">
+    <resultMap id="entrustMap" type="com.design.yang.dto.EntrustInfo">
+        <id column="entrust_id" property="entrustId"></id>
+        <result column="user_id" property="userId"></result>
+        <result column="pairs" property="pairs"></result>
+        <result column="direction" property="direction"></result>
+        <result column="price" property="price"></result>
+        <result column="number" property="number"></result>
+        <result column="condition" property="condition"></result>
+        <result column="completed_transaction" property="completed"></result>
+        <result column="release_time" property="releaseTime"></result>
+        <result column="is_revoke" property="isRevoke"></result>
+    </resultMap>
+
+
+    <insert id="insertEntrustInfo">
+        <selectKey keyProperty="entrustId" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+      INSERT INTO entrust_info ( user_id, pairs, direction, price,
+      number, `condition`, completed_transaction, release_time, is_revoke ,total_volume)
+      VALUES
+	( #{userId}, #{pairs}, #{direction}, #{price}, #{number}, #{condition}, 0, NOW( ), 'N' ,#{volume})
+    </insert>
+
+    <update id="updateEntrustInfoCompleted">
+        UPDATE entrust_info
+        SET completed_transaction = #{completed} + completed_transaction
+        WHERE
+	        entrust_id = #{entrustId}
+    </update>
+
+    <update id="updateEntrustInfoRevoke">
+        UPDATE entrust_info
+        SET is_revoke = 'Y'
+        WHERE
+	        entrust_id = #{entrustId}
+    </update>
+
+    <select id="selectEntrustInfo" resultMap="entrustMap">
+      SELECT
+	    pairs,
+	    direction,
+	    price,
+	    number,
+	    `condition`,
+	    completed_transaction,
+	    release_time,
+	    is_revoke
+      FROM
+	    entrust_info
+	  WHERE 1 = 1
+        <if test="userId != null">
+            AND user_id = #{userId}
+        </if>
+        <if test="pairs != null and pairs != ''">
+            AND pairs like CONCAT('%',#{pairs},'%')
+        </if>
+        <if test="direction != null and direction != ''">
+            AND direction = #{direction}
+        </if>
+        <if test="startTime != null">
+            AND <![CDATA[ release_time >= #{startTime}  ]]>
+        </if>
+        <if test="endTime != null">
+            AND <![CDATA[ release_time <= #{endTime}  ]]>
+        </if>
+        <if test="isRevoke != null and isRevoke != ''">
+            AND is_revoke = #{isRevoke}
+        </if>
+    </select>
+
+    <select id="selectCurrentEntrustInfo" resultMap="entrustMap">
+        SELECT
+        entrust_id,
+        pairs,
+        direction,
+        price,
+        number,
+        `condition`,
+        completed_transaction,
+        release_time
+        FROM
+        entrust_info
+        WHERE user_id = #{userId}
+        AND  number - completed_transaction > #{accuracy}
+        AND  is_revoke = 'N'
+    </select>
+
+</mapper>

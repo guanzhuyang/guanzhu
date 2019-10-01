@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.design.yang.mapper.EntrustTransactionMapper">
+    <resultMap id="entrustMap" type="com.design.yang.dto.EntrustTransaction">
+        <result column="entrust_id" property="entrustId"></result>
+        <result column="trader_id" property="traderId"></result>
+        <result column="price" property="price"></result>
+        <result column="number" property="number"></result>
+        <result column="transaction_time" property="transactionTime"></result>
+    </resultMap>
+
+
+    <insert id="insertTransaction">
+        INSERT INTO entrust_transaction
+        ( entrust_id, trader_id, price, number, transaction_time )
+        VALUES
+        <foreach collection='transactions' item='item' index='index' separator=','>
+	      (#{item.entrustId},#{item.traderId},#{item.price},#{item.number},#{item.transactionTime} )
+        </foreach>
+    </insert>
+
+
+</mapper>

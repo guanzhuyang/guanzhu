@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.design.yang.mapper.RoleMenuMapper">
+    <resultMap id="MenuInfoMap" type="com.design.yang.dto.MenuInfo">
+        <result column="id" property="id"></result>
+        <result column="role_id" property="roleId"></result>
+        <result column="name" property="name"></result>
+        <result column="path" property="path"></result>
+        <result column="redirect" property="redirect"></result>
+        <association property="meta" javaType="com.design.yang.dto.MenuMeta">
+            <result column="title" property="title"></result>
+            <result column="icon" property="icon"></result>
+        </association>
+        <collection property="children" select="getChildrenByParentId" column="{id=id , role_id=role_id}">
+        </collection>
+    </resultMap>
+
+
+    <select id="getChildrenByParentId" resultMap="MenuInfoMap">
+        SELECT
+	      rm.menu_id id,
+	      rm.role_id role_id,
+	      mi.`name` name,
+	      mi.path path,
+	      mi.title title,
+	      mi.icon icon,
+	      mi.redirect redirect
+        FROM
+	      menu_info mi
+	    INNER JOIN role_menu rm ON mi.id = rm.menu_id
+        WHERE
+	      rm.role_id = #{role_id}
+	    AND mi.parent_id = #{id}
+	    ORDER BY seq_num
+    </select>
+
+    <select id="getMenuByRole" resultMap="MenuInfoMap">
+       SELECT
+	      rm.menu_id id,
+	      rm.role_id role_id,
+	      mi.`name` name,
+	      mi.path path,
+	      mi.title title,
+	      mi.icon icon,
+	      mi.redirect redirect
+        FROM
+	      menu_info mi
+	    INNER JOIN role_menu rm ON mi.id = rm.menu_id
+        WHERE
+	      rm.role_id = #{role_id}
+	    AND mi.parent_id = 0
+	    ORDER BY seq_num
+    </select>
+</mapper>

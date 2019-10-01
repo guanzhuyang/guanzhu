@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.design.yang.mapper.CurrencyBalanceMapper">
+    <resultMap id="balanceMap" type="com.design.yang.dto.UserCurrencyBalance">
+        <result column="user_id" property="userId"></result>
+        <result column="currency_name" property="curName"></result>
+        <result column="available_balance" property="availableBalance"></result>
+        <result column="balance" property="balance"></result>
+    </resultMap>
+
+    <insert id="insertNewCurrencyBalance">
+        INSERT INTO currency_balance
+        ( user_id, currency_name, available_balance, balance )
+        VALUES
+	      (#{userId},#{curName},#{availableBalance},#{balance} )
+    </insert>
+
+    <insert id="insertNewCurrencyBalances">
+        INSERT INTO currency_balance
+        ( user_id, currency_name, available_balance, balance )
+        VALUES
+        <foreach collection='bals' item='item' index='index' separator=','>
+	      (#{item.userId},#{item.curName},#{item.availableBalance},#{item.balance} )
+        </foreach>
+    </insert>
+
+    <update id="addBalance">
+        UPDATE currency_balance
+        SET balance = balance + #{ban},
+            available_balance = available_balance + #{ban}
+        WHERE
+	        user_id = #{userId}
+	    AND currency_name = #{cur}
+    </update>
+
+    <update id="reduceBalance">
+        UPDATE currency_balance
+        SET balance = balance - #{ban},
+            available_balance = available_balance - #{ban}
+        WHERE
+	        user_id = #{userId}
+	    AND currency_name = #{cur}
+    </update>
+
+    <update id="addAvailableBalance">
+        UPDATE currency_balance
+        SET
+            available_balance = available_balance + #{ban}
+        WHERE
+	        user_id = #{userId}
+	    AND currency_name = #{cur}
+    </update>
+
+    <update id="reduceAvailableBalance">
+        UPDATE currency_balance
+        SET
+            available_balance = available_balance - #{ban}
+        WHERE
+	        user_id = #{userId}
+	    AND currency_name = #{cur}
+    </update>
+
+    <update id="addTotalBalance">
+        UPDATE currency_balance
+        SET
+            balance = balance + #{ban}
+        WHERE
+	        user_id = #{userId}
+	    AND currency_name = #{cur}
+    </update>
+
+    <update id="reduceTotalBalance">
+        UPDATE currency_balance
+        SET
+            balance = balance - #{ban}
+        WHERE
+	        user_id = #{userId}
+	    AND currency_name = #{cur}
+    </update>
+
+    <update id="operationBalance">
+        UPDATE currency_balance
+        SET
+            balance = balance + #{total},
+            available_balance = available_balance + #{lock}
+        WHERE
+	        user_id = #{userId}
+	    AND currency_name = #{cur}
+    </update>
+
+    <update id="updateCurrencyBalance">
+        UPDATE currency_balance
+        SET balance = #{balance},
+            available_balance = #{availableBalance}
+        WHERE
+	        user_id = #{userId}
+	    AND currency_name = #{curName}
+    </update>
+
+    <select id="selectBanlance" resultMap="balanceMap">
+      SELECT
+	      currency_name,
+	      available_balance,
+	      balance
+      FROM
+	      currency_balance
+      WHERE 1=1
+        <if test="userId != null">
+            AND user_id = #{userId}
+        </if>
+        <if test="curName != null">
+            AND currency_name = #{curName}
+        </if>
+        <if test="balance != null">
+            AND balance > #{balance}
+        </if>
+        <if test="availableBalance != null">
+            AND available_balance > #{availableBalance}
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.design.yang.mapper.SampleUserInfoMapper">
+    <resultMap id="infoMap" type="com.design.yang.dto.SampleUserInfo">
+        <result column="name" property="name"></result>
+        <result column="avater" property="avater"></result>
+    </resultMap>
+
+    <resultMap id="baseInfoMap" type="com.design.yang.dto.UserBaseInfo">
+        <result column="name" property="nickName"></result>
+        <result column="account" property="account"></result>
+        <result column="mobile" property="mobile"></result>
+        <result column="email" property="email"></result>
+        <result column="avater" property="avater"></result>
+    </resultMap>
+
+
+    <select id="getSamUserInfoByid" resultMap="infoMap">
+        select name , avater from user_info where id=#{id}
+    </select>
+
+    <select id="getBaseInfo" resultMap="baseInfoMap">
+        select ui.name name, ui.avater avater,ul.user_account account ,ul.user_email email ,ul.user_mobile mobile
+        from user_info ui left join user_login ul on ui.id = ul.user_id
+        where ui.id=#{id}
+    </select>
+
+    <insert id="insertInfo">
+        insert into user_info(id,name,avater) values (#{account},#{nickName},'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')
+    </insert>
+
+</mapper>

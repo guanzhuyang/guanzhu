@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.design.yang.mapper.CustomerRegisterMapper">
+    <resultMap id="registerMap" type="com.design.yang.dto.RegisterInfo">
+        <id column="user_id" property="id"></id>
+        <result column="user_account" property="account"></result>
+        <result column="user_mobile" property="mobile"></result>
+        <result column="user_email" property="email"></result>
+        <result column="password" property="passwordEncode"></result>
+    </resultMap>
+
+
+    <select id="selectByAccount" parameterType="String" resultMap="registerMap">
+        select user_account,user_id from user_login where user_account = #{account}
+    </select>
+
+    <select id="selectByMobile" parameterType="String" resultMap="registerMap">
+        select user_account,user_id from user_login where user_mobile = #{mobile}
+    </select>
+
+    <select id="selectByEmail" parameterType="String" resultMap="registerMap">
+        select user_account,user_id from user_login where user_email = #{email}
+    </select>
+
+    <insert id="insertNewCustomer">
+        insert into user_login
+        (user_account,user_mobile,user_email,password,status,create_time,last_update_time)
+        values (#{account},#{mobile},#{email},#{passwordEncode},'Y',NOW(),NOW())
+    </insert>
+
+    <update id="updateCustomer">
+        update user_login
+        <set>
+            <if test="passwordEncode != null">
+                password = #{passwordEncode} ,
+            </if>
+            <if test="status != null">
+                status = #{status} ,
+            </if>
+            <if test="account != 0">
+                last_update_time = now() ,
+            </if>
+        </set>
+        where user_account = #{account}
+    </update>
+</mapper>

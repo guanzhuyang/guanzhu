@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.design.yang.mapper.CurrentInfoMapper">
+    <resultMap id="CurrentInfoMap" type="com.design.yang.dto.CurrentInfo">
+        <result column="name" property="name"></result>
+        <result column="name_zn" property="nameZn"></result>
+        <result column="issue_time" property="issueTime"></result>
+        <result column="circulation" property="circution"></result>
+        <result column="turnover" property="turnover"></result>
+        <result column="official_website" property="officialWebsite"></result>
+        <result column="introduction" property="introduction"></result>
+    </resultMap>
+
+
+    <select id="selectCurrentInfo" resultMap="CurrentInfoMap">
+        SELECT
+	      `name`,
+	      name_zn,
+	      issue_time,
+	      circulation,
+	      turnover,
+	      official_website,
+	      introduction
+        FROM
+	      currency_info
+	    WHERE 1=1
+        <if test="name != null">
+          AND `name` = #{name}
+        </if>
+        <if test="nameZn != null">
+            AND name_zn = #{nameZn}
+        </if>
+    </select>
+
+    <insert id="insertCurrentInfo">
+        insert into currency_info
+          (`name`,
+          name_zn,
+	      issue_time,
+	      circulation,
+	      turnover,
+	      official_website,
+	      introduction)
+	      values (#{name},#{nameZn},#{issueTime},#{circution},#{turnover},#{officialWebsite},#{introduction})
+    </insert>
+
+    <update id="updateCurrentInfo">
+        update currency_info
+        <set>
+            <if test="nameZn != null">
+                name_zn = #{nameZn} ,
+            </if>
+            <if test="issueTime != null">
+                issue_time = #{issueTime} ,
+            </if>
+            <if test="circution != null">
+                circulation = #{circution} ,
+            </if>
+            <if test="turnover != null">
+                turnover = #{turnover} ,
+            </if>
+            <if test="officialWebsite != null">
+                official_website = #{officialWebsite} ,
+            </if>
+            <if test="introduction != null">
+                introduction = #{introduction} ,
+            </if>
+        </set>
+        where `name` = #{name}
+    </update>
+
+</mapper>

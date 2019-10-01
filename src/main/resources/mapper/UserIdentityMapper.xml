@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.design.yang.mapper.UserIdentityMapper">
+    <resultMap id="idMap" type="com.design.yang.dto.UserIdentity">
+        <result column="id" property="userId"></result>
+        <result column="identitycard_positive" property="identitycardPositive"></result>
+        <result column="identitycard_opposite" property="identitycardOpposite"></result>
+        <result column="id_number" property="idNumber"></result>
+        <result column="id_name" property="idName"></result>
+        <result column="start_time" property="startTime"></result>
+        <result column="end_time" property="endTime"></result>
+        <result column="authority" property="authority"></result>
+        <result column="is_examine" property="isExamine"></result>
+    </resultMap>
+
+    <select id="selectUserIdentity" resultMap="idMap">
+        SELECT * FROM user_identity WHERE 1 = 1
+        <if test="isExamine != null">
+            AND is_examine = #{isExamine}
+        </if>
+        <if test="userId != 0">
+            AND id = #{userId}
+        </if>
+    </select>
+
+    <insert id="insertUserIdentity">
+        insert into user_identity
+        (id,
+        identitycard_positive,
+        identitycard_opposite,
+        id_number,id_name,
+        start_time,
+        end_time,
+        authority,
+        is_examine)
+        values
+        (#{userId},
+        #{identitycardPositive},
+        #{identitycardOpposite},
+        #{idNumber},
+        #{idName},
+        #{startTime},
+        #{endTime},
+        #{authority},
+        #{isExamine})
+    </insert>
+
+    <update id="updateUserIdentity">
+        update user_identity
+        <set>
+            <if test="identitycardPositive != null">
+                identitycard_positive = #{identitycardPositive} ,
+            </if>
+            <if test="identitycardOpposite != null">
+                identitycard_opposite = #{identitycardOpposite} ,
+            </if>
+            <if test="idNumber != null">
+                id_number = #{idNumber} ,
+            </if>
+            <if test="idName != null">
+                id_name = #{idName} ,
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime} ,
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime} ,
+            </if>
+            <if test="authority != null">
+                authority = #{authority} ,
+            </if>
+            <if test="isExamine != null">
+                is_examine = #{isExamine} ,
+            </if>
+        </set>
+        where id = #{userId}
+    </update>
+
+</mapper>

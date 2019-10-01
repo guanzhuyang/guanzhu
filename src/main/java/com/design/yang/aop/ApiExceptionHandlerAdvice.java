@@ -20,6 +20,7 @@ public class ApiExceptionHandlerAdvice {
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public BaseResponse exception(Exception exception, HttpServletResponse response) {
+        exception.printStackTrace();
         BaseResponse base = new BaseResponse();
         if(exception instanceof AppException){//api异常
             AppException apiException = (AppException)exception;
